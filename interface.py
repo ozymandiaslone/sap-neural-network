@@ -363,7 +363,7 @@ def playRound(player, game_num, turn, recursive_call):
     max_actions = 7
 
     #Initialize a variable to store the activation threshold
-    activation_threshold = 0.5
+    activation_threshold = 0.8
 
     #Initialize a variable to hold the amount of gold we have
     gold = 0
