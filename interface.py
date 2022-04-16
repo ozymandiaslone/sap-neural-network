@@ -373,7 +373,7 @@ def playRound(player, game_num, turn, recursive_call):
 
     #If the player is not playing, then it will return
     if not playing:
-        return
+        return game_num
 
     #If the player is playing, then it will continue
     if playing:
