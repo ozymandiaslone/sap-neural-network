@@ -11,8 +11,7 @@ INTRODUCTION
 
 This repository serves as the home to my Super Auto Pets AI. There are two classes, Nnet() and Player(). Each Player plays the game, and has an Nnet attribute that can be thought of as its brain. Each player will play a full game of Super Auto Pets, and its fitness will be calculated. The more fit players will breed, and random mutations will be introduced. 
 
-* Factors involved in fitness:
-  Some factors taken into consideration when calculating fitness include: ending a turn with unspent gold, losing rounds, winning rounds, drawing rounds, and winning or losing games. 
+* Some factors taken into consideration when calculating fitness include: ending a turn with unspent gold, losing rounds, winning rounds, drawing rounds, and winning or losing games. 
 
 INSTALLATION
 ---------------------
