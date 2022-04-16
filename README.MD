@@ -9,7 +9,7 @@ TABLE OF CONTENTS
 INTRODUCTION
 ---------------------
 
-This repository serves as the home to my Super Auto Pets AI. There are two classes, Nnet() and Player(). Each Player plays the game, and has an Nnet attribute that can be thought of as its brain. Each player will play a full game of Super Auto Pets, and its fitness will be calculated. The more fit players will breed, and random mutations will be introduced. 
+This repository serves as the home to my Super Auto Pets AI. There are two classes, Nnet() and Player(). interface.py is responsible for interacting with the game. gameviewer.py is responsible for querying the screen to get information about the current gamestate. Each Player plays the game, and has an Nnet attribute that can be thought of as its brain. Each player will play a full game of Super Auto Pets, and its fitness will be calculated. The more fit players will breed, and random mutations will be introduced. 
 
 * Some factors taken into consideration when calculating fitness include: ending a turn with unspent gold, losing rounds, winning rounds, drawing rounds, and winning or losing games. 
 
