@@ -83,7 +83,7 @@ animal_keys = [["ant",0.01],
 def startArena():
     pyautogui.click(x=600, y=300)
 
-#Clicks the "Roll" button; if not in a recursive call, set rollbool to True
+#Clicks the "Roll" button
 def roll():
     pyautogui.click(x=200, y=1000)
 
@@ -586,7 +586,7 @@ def playGame(player, game_num):
             #Wait one last time to make sure it's a real win
             else:
                 print("FINAL EMERGENCY WAIT SEQUENCE")
-                time.sleep(6.6)
+                time.sleep(10)
             
             #If we have a real win, adjust fitness accordingly
             if g.checkLoss() == False:

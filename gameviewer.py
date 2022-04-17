@@ -3,12 +3,12 @@ from os import read
 import cv2
 import numpy as np
 import time
-import screendata
 import pyautogui
 
 '''Functions which returns a screenshot of the game'''
 def getGameData():
-    image = screendata.grab_raw_screen()
+    image = pyautogui.screenshot()
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     return image
 
 '''Function which takes in a screenshot and slices it into separate picutres for analysis'''
@@ -225,7 +225,7 @@ def checkOutcome(image):
     for i in range(0,3):
         errorL2 = cv2.norm(image, outcome_test[i][1], cv2.NORM_L2)
         similarity = errorL2 / (outcome_test[i][1].shape[0] * outcome_test[i][1].shape[1])
-        if similarity < .75:
+        if similarity < .95:
             outcome = money_test[i][0]
     return outcome
 
@@ -246,5 +246,23 @@ def checkLoss():
         return "loop"
     else: return None
 
-#Testing area for when thing inevitably break
-#print(checkLoss())
+'''Function which checks what animals are currently in play'''
+def checkCurrentAnimals():
+    #get the image
+    preslice = getGameData()
+    #crop the image
+    images = []
+    images.append(preslice[400:440, 499:623].copy())
+    images.append(preslice[400:440, 633:757].copy())
+    images.append(preslice[400:440, 766:890].copy())
+    images.append(preslice[400:440, 899:1023].copy())
+    images.append(preslice[400:440, 1032:1156].copy())
+    i = 0
+    while i < len(images):
+        print(cv2.imwrite(f"test{str(i)}.jpg", images[i]))
+        i += 1
+    return True
+
+
+#Testing area for when things inevitably break
+#print(checkCurrentAnimals())

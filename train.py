@@ -1,5 +1,3 @@
-'''----------This shit gonna play SAP----------'''
-
 #imports
 import numpy as np
 import time
@@ -61,7 +59,7 @@ startnum = 0
 
 #Main loop
 while evolve:
-
+    print(str(len(gen)))
     #For each player in the genration, play a game and update their fitness
     for player in gen:
         if count >= startnum:
@@ -69,6 +67,7 @@ while evolve:
         count += 1
     
     #After the generation has been played, evolve it.
+    print("----EVOLVING GENERATION----")
     new_gen = gen[0].evolve_population(gen=gen)
 
     #Set the active generation to the newly evolved generation
