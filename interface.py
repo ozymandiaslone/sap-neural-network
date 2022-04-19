@@ -76,6 +76,7 @@ animal_keys = [["ant",0.01],
                 ["tiger",0.55],
                 ["boar",0.56],
                 ["beaver",0.57],
+                ["empty", 0.00]
 ]
 
 '''Define game action functions. These functions perform the actual mouse inputs needed to play the game'''
@@ -138,15 +139,21 @@ def endTurn():
 '''Function to get the current animals lined up in the inventory board. Currently limited by the capabilities
     of the functions within gameviewer.py'''
 def getGameInfo(turn):
-    board = []
-    animals = g.checkForAnimals(g.sliceImage(turn))
-    for a1 in animals:
+    detected = []
+    buy_animals = g.checkForAnimals(g.sliceImage(turn))
+    for a1 in buy_animals:
         for a2 in animal_keys:
             if a1 == a2[0]:
-                board.append(a2[1])
-    while len(board) < 5:
-        board.append(0)
-    return board
+                detected.append(a2[1])
+    active_animals = g.checkCurrentAnimals()
+    for a1 in active_animals:
+        for a2 in animal_keys:
+            if a1 == a2[0]:
+                detected.append(a2[1])
+    while len(detected) < 10:
+        print("Uh oh, didn't detect enough animals...")
+        detected.append(0)
+    return detected
 
 '''Function which takes in an action command, and performs the corresponding action'''
 def doAction(action_command, recursive_call):
@@ -389,7 +396,11 @@ def playRound(player, game_num, turn, recursive_call):
             time.sleep(0.5)
 
         #Now that we can see some animals, we query the network for actions
-        raw_actions = player.query(getGameInfo(turn))
+        
+
+        inputs = getGameInfo(turn)
+
+        raw_actions = player.query(inputs)
         for ra in raw_actions:
             actions.append(ra[0])
 

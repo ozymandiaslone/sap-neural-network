@@ -8,9 +8,9 @@ class Players():
         self.turn = turn
         self.board = board
         if nnet1 is not None and nnet2 is not None:
-            self.nnet = Nnet(5,50,36,nnet1, nnet2)
+            self.nnet = Nnet(10,50,36,nnet1, nnet2)
         else:
-            self.nnet = Nnet(5, 50, 36)
+            self.nnet = Nnet(10, 50, 36)
 
     
 
@@ -26,8 +26,7 @@ class Players():
             self.turn += 1
         self.fitness += spent
         self.fitness -= lives_lost
-        
-        
+              
 
     def create_offspring(p1,p2):
         new_player = Players(0, p1.board)
