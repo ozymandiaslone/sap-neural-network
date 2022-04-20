@@ -43,14 +43,14 @@ if numBrains() != 0:
     while count + 1 < numBrains():
         i_h_weights = np.load("./neural_data/player"+str(count)+"IH.npy")
         h_o_weights = np.load("./neural_data/player"+str(count)+"HO.npy")
-        gen.append(p.Players(0, itf.getGameInfo(0), i_h_weights, h_o_weights))
+        gen.append(p.Players(0, itf.getGameInfo(0,0), i_h_weights, h_o_weights))
         print("LOADED BRAIN")
         count += 1
 
 #If we haven't loaded enough brains from disk, create random new ones
 if count < gen_size:
     for i in range(count,gen_size):
-        gen.append(p.Players(0, itf.getGameInfo(0)))
+        gen.append(p.Players(0, itf.getGameInfo(0,0)))
 
 count = 0
 

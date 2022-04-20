@@ -79,6 +79,10 @@ animal_keys = [["ant",0.01],
                 ["empty", 0.00]
 ]
 
+'''Define our sigmoid function. Will be used to map the integer turn number to a value between 0 and 1'''
+def sigmoid(x):
+    sig = 1/ (1+np.exp(-x))
+    return sig
 '''Define game action functions. These functions perform the actual mouse inputs needed to play the game'''
 #Clicks the "Start Arena" button
 def startArena():
@@ -138,20 +142,25 @@ def endTurn():
 
 '''Function to get the current animals lined up in the inventory board. Currently limited by the capabilities
     of the functions within gameviewer.py'''
-def getGameInfo(turn):
+def getGameInfo(turn,gold):
     detected = []
+    #Add potential animals to the list
     buy_animals = g.checkForAnimals(g.sliceImage(turn))
     for a1 in buy_animals:
         for a2 in animal_keys:
             if a1 == a2[0]:
                 detected.append(a2[1])
+    #Add active animals to the list
     active_animals = g.checkCurrentAnimals()
     for a1 in active_animals:
         for a2 in animal_keys:
             if a1 == a2[0]:
                 detected.append(a2[1])
-    while len(detected) < 10:
-        print("Uh oh, didn't detect enough animals...")
+    #Add the turn number to the end of the list
+    detected.append(sigmoid(turn))  
+    detected.append(sigmoid(gold))
+    while len(detected) < 12:
+        print("Uh oh, didn't detect enough information...")
         detected.append(0)
     return detected
 
@@ -378,6 +387,7 @@ def playRound(player, game_num, turn, recursive_call):
     #Initialize private rollbool, False by default
     rollbool = False
 
+    print(f"Turn {turn}")
     #If the player is not playing, then it will return
     if not playing:
         return game_num
@@ -390,7 +400,7 @@ def playRound(player, game_num, turn, recursive_call):
             print("Game Number: " + str(game_num))
 
         #Check if we can see animals in our inventory, if not, attempt to click the "Start Arena" button
-        while getGameInfo(turn)[0]==0 and getGameInfo(turn)[1]==0 and getGameInfo(turn)[2]== 0 and g.checkMoney(g.sliceMoney()) == None:
+        while getGameInfo(turn, gold)[0]==0 and getGameInfo(turn,gold)[1]==0 and getGameInfo(turn,gold)[2]== 0 and g.checkMoney(g.sliceMoney()) == None:
             print("Couldn't see any animals or gold!") 
             startArena()
             time.sleep(0.5)
@@ -398,7 +408,7 @@ def playRound(player, game_num, turn, recursive_call):
         #Now that we can see some animals, we query the network for actions
         
 
-        inputs = getGameInfo(turn)
+        inputs = getGameInfo(turn,gold)
 
         raw_actions = player.query(inputs)
         for ra in raw_actions:
@@ -505,7 +515,7 @@ def playRound(player, game_num, turn, recursive_call):
         #If we are in a recursive call, we are now done. No need to adjust fitness. Reset rollbool.
         if recursive_call:
             rollbool = False
-            return
+            return turn
 
         #Make sure we can see the amount of gold we have
         while g.checkMoney(g.sliceMoney()) == None:
@@ -529,7 +539,7 @@ def playRound(player, game_num, turn, recursive_call):
         print("Ended turn!")
 
         rollbool = False
-
+        print(f"Turn: {turn} ending...")
         return turn + 1
 
 '''Function which takes in a player object, and plays through a full game'''
@@ -537,8 +547,7 @@ def playGame(player, game_num):
 
     #Global variables
     global playing
-
-    #Initialize a variable to keep track of the turn number
+    print("UH OH SETTING TURN TO 1...")
     turn = 1
 
     #If we are not playing a game, start.
@@ -552,7 +561,10 @@ def playGame(player, game_num):
     while playing:
 
         #Play round and update turn
-        turn = playRound(player, game_num, turn, False)
+        playRound(player, game_num, turn, False)
+        turn += 1
+        print("TURN UPDATED")
+        print(turn)
 
         '''At this point, the player has just clicked the "End Turn" button, so
         we need to wait for the battle to conclude and check the outcome.'''
@@ -580,19 +592,19 @@ def playGame(player, game_num):
             if g.checkOutcome(g.sliceOutcome()) == 1:
                 print("WooHoo! Won a round!")
                 player.fitness += 10
-                return game_num
+                continue
 
             #If we lost, adjust fitness accordingly
             if g.checkOutcome(g.sliceOutcome()) == 0:
                 print("Oh no! Lost a round!")
                 player.fitness -= 10
-                return game_num
+                continue
 
             #If we drew, adjust fitness accordingly
             if g.checkOutcome(g.sliceOutcome()) == 2:
                 print("Well, a Draw is a Draw!")
                 player.fitness += 1
-                return game_num
+                continue
             
             #Wait one last time to make sure it's a real win
             else:

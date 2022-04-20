@@ -392,5 +392,7 @@ def checkCurrentAnimals():
     return players_on_board
 
 
+
+
 #Testing area for when things inevitably break
 print(checkCurrentAnimals())

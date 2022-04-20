@@ -8,9 +8,9 @@ class Players():
         self.turn = turn
         self.board = board
         if nnet1 is not None and nnet2 is not None:
-            self.nnet = Nnet(10,50,36,nnet1, nnet2)
+            self.nnet = Nnet(12,50,36,nnet1, nnet2)
         else:
-            self.nnet = Nnet(10, 50, 36)
+            self.nnet = Nnet(12, 50, 36)
 
     
 
