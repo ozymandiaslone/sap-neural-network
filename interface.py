@@ -156,11 +156,12 @@ def getGameInfo(turn,gold):
         for a2 in animal_keys:
             if a1 == a2[0]:
                 detected.append(a2[1])
-    #Add the turn number to the end of the list
-    detected.append(sigmoid(turn))  
-    detected.append(sigmoid(gold))
+    #Add the turn number to the end of the list, but only if we are detecting animals
+    if len(detected) > 0:
+        detected.append(sigmoid(turn))  
+        detected.append(sigmoid(gold))
     while len(detected) < 12:
-        print("Uh oh, didn't detect enough information...")
+        #print("Uh oh, didn't detect enough information...")
         detected.append(0)
     return detected
 
@@ -547,7 +548,7 @@ def playGame(player, game_num):
 
     #Global variables
     global playing
-    print("UH OH SETTING TURN TO 1...")
+    #print("UH OH SETTING TURN TO 1...")
     turn = 1
 
     #If we are not playing a game, start.
@@ -563,19 +564,17 @@ def playGame(player, game_num):
         #Play round and update turn
         playRound(player, game_num, turn, False)
         turn += 1
-        print("TURN UPDATED")
-        print(turn)
+        #print("TURN UPDATED")
+        #print(turn)
 
         '''At this point, the player has just clicked the "End Turn" button, so
         we need to wait for the battle to conclude and check the outcome.'''
 
         #While we have no outcome or no loss data, wait
-        while g.checkOutcome(g.sliceOutcome()) == None:
-            while g.checkLoss() == None:
-                print("Checking Loss...")
-                time.sleep(3)
+        while g.checkOutcome(g.sliceOutcome()) and g.checkLoss == None:
+            '''-----------------------------GOT STUCK HERE (maybe fixed? need to check) -----------------------------'''
             print("Waiting patiently for battle to conclude...")
-            time.sleep(2)
+            time.sleep(6.6)
             if g.checkLoss():
                 break
         
@@ -610,10 +609,32 @@ def playGame(player, game_num):
             else:
                 print("FINAL EMERGENCY WAIT SEQUENCE")
                 time.sleep(10)
+
+                '''Check it all over again for good measure. We really really really
+                really really really don't want to incorecctly reward it for a win.
+                
+                And it has a tendency to do exactly that.'''
+
+                if g.checkOutcome(g.sliceOutcome()) == 1:
+                    print("WooHoo! Won a round!")
+                    player.fitness += 10
+                    continue
+
+                #If we lost, adjust fitness accordingly
+                if g.checkOutcome(g.sliceOutcome()) == 0:
+                    print("Oh no! Lost a round!")
+                    player.fitness -= 10
+                    continue
+
+                #If we drew, adjust fitness accordingly
+                if g.checkOutcome(g.sliceOutcome()) == 2:
+                    print("Well, a Draw is a Draw!")
+                    player.fitness += 1
+                    continue
             
-            #If we have a real win, adjust fitness accordingly
-            if g.checkLoss() == False:
-                print("WooHoo! Won a game!")
-                player.fitness += 100
-                playing = False
-                return game_num + 1
+                #If we have a real win, adjust fitness accordingly
+                if g.checkLoss() == False:
+                    print("WooHoo! Won a game!")
+                    player.fitness += 100
+                    playing = False
+                    return game_num + 1

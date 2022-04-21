@@ -23,6 +23,9 @@ There are no current official releases. If you want to run, tweak, or play with 
 CURRENT ISSUES
 ---------------------
 [CURRENT]
+As of 4/19/2022, it is slightly less imperfect, but still not 100%. It still can't see or interact with food, which opens up lots of possibilites. Additionally, it can't directly swap around the positions of animals which have already been placed on the game board. Neurons for the turn and gold have been fully implemented, and it is in an untested yet believed-to-be-stable state.
+
+[OLD]
 As of 4/19/2022, it is slightly less imperfect, but still not 100%. It still can't see or interact with food, which opens up lots of possibilites. Additionally, it can't directly swap around the positions of animals which have already been placed on the game board. I implemented the extra neurons and inputs necessary for the Players' brains to see the animals it currently owns, and their positions.
 
 I still need to implement input neurons for the turn, gold, and remaining health. 

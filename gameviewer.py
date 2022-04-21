@@ -35,7 +35,7 @@ def sliceMoney():
 
 '''Function which takes in an images and determines the available animals'''
 def checkForAnimals(images):
-    positions = [None]*3
+    positions = [None]*5
 
     #grab images to test against,label them, and put them into a list
     test_images = []

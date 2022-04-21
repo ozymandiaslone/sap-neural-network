@@ -59,7 +59,7 @@ startnum = 0
 
 #Main loop
 while evolve:
-    print(str(len(gen)))
+    #print(str(len(gen)))
     #For each player in the genration, play a game and update their fitness
     for player in gen:
         if count >= startnum:
