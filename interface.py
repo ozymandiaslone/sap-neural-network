@@ -571,7 +571,7 @@ def playGame(player, game_num):
         we need to wait for the battle to conclude and check the outcome.'''
 
         #While we have no outcome or no loss data, wait
-        while g.checkOutcome(g.sliceOutcome()) and g.checkLoss == None:
+        while g.checkOutcome(g.sliceOutcome()) == None:
             '''-----------------------------GOT STUCK HERE (maybe fixed? need to check) -----------------------------'''
             print("Waiting patiently for battle to conclude...")
             time.sleep(6.6)
